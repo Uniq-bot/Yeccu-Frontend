@@ -1,0 +1,104 @@
+
+.HeroSection {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 3rem;
+  color: white;
+}
+
+
+.Background {
+  position: absolute;
+  inset: 0;
+  background-image: url("../../../../public/homefirst.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+
+.Overlay {
+  position: relative;
+  z-index: 3;
+  max-width: 550px;
+  justify-content: center;
+}
+
+.HeroSection::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.2));
+  z-index: 2;
+}
+
+.Overlay h1 {
+  font-size: 4.2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+.yellow {
+  color: #ffc400;
+}
+
+
+.subtext {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 480px;
+}
+
+.hero-buttons {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+
+.btn-primary {
+  background: #ffc400;
+  color: black;
+  padding: 0.9rem 2rem;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+}
+
+
+.btn-outline {
+  padding: 0.9rem 2rem;
+  background: transparent;
+  border: 2px solid #ffc400;
+  color: #ffc400;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.btn-outline:hover {
+  background: #ffc400;
+  color: black;
+}
+
+
+@media (max-width: 768px) {
+  .Overlay h1 {
+    font-size: 3rem;
+  }
+}
