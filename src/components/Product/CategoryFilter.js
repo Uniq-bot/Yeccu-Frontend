@@ -12,16 +12,17 @@ const CategoryFilter = () => {
     console.log("Filtered Products:", filtered);
   };
   return (
-    <div>
-      <div className="flex justify-center space-x-4  pb-4">
+    <div className="pt-5"> 
+      <div className=" flex-wrap hidden md:flex justify-center gap-2 pb-4 overflow-x-auto sm:overflow-visible">
         {categories.map((category, id) => (
           <button
             className={`${
               currentCategory === category
-                ? "bg-amber-300 text-black scale-105 -translate-y-[1px]"
+                ? "bg-amber-300 text-black scale-105 -translate-y-[1px] shadow-md"
                 : "bg-transparent text-amber-300"
-            } px-2 transition-all cursor-pointer hover:scale-105 border-amber-300 border py-1`}
+            } px-3 md:px-4 lg:px-5 py-1.5 md:py-2 transition-transform duration-150 cursor-pointer hover:scale-105 border border-amber-300 rounded-md whitespace-nowrap min-w-[88px] text-center focus:outline-none focus:ring-2 focus:ring-amber-300`}
             onClick={() => handleCategory(category)}
+            aria-pressed={currentCategory === category}
             key={id}
           >
             <span>{category}</span>
