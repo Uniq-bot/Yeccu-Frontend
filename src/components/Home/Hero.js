@@ -1,10 +1,11 @@
 import React from 'react'
 import "./CSS/Hero.css"
 import Link from 'next/link'
+import ScrollIcon from './Scroll'
 
 function Hero() {
   return (
-    <div className='relative HeroSection min-h-[70vh]'>
+    <div className='relative HeroSection min-h-[93vh]'>
       {/* background image */}
       <div 
         className='absolute inset-0 bg-cover bg-center' 
@@ -29,6 +30,9 @@ function Hero() {
           <Link href={'/products'} className="btn-primary">VIEW PRODUCT</Link>
           <Link href={'/contact'} className="btn-outline">JOIN TRAINING</Link>
         </div>
+      </div>
+      <div>
+        <ScrollIcon />
       </div>
     </div>
   )

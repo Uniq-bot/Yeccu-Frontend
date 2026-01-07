@@ -71,10 +71,11 @@ const Navbar = () => {
               </Link>
             </li>
 
-            <div className="Icon" onClick={toggleMenu}>
+            
+          </ul>
+          <div className="Icon" onClick={toggleMenu}>
               <FaBars color="white" size={24} />
             </div>
-          </ul>
 
         </nav>
       </div>
