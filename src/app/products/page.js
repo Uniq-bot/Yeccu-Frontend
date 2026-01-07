@@ -1,3 +1,8 @@
+"use client"
+import CategoryFilter from '@/components/Product/CategoryFilter'
+import MobileFilter from '@/components/Product/MobileFilter'
+import ProductCard from '@/components/Product/ProductCard'
+import { useProductStore } from '@/libs/useProductStore'
 import React, { useState } from 'react'
 
 const Products = () => {
