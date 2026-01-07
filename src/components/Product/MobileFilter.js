@@ -29,8 +29,7 @@ const MobileFilter = () => {
       {/* Floating button (mobile only) */}
       <button
         onClick={open}
-        aria-label="Open filters"
-        className={`md:hidden fixed bottom-6 right-10 z-50 p-3 rounded-full bg-black text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-300 ${showFilter ? 'hidden' : ''}`}
+        className={`md:hidden fixed bottom-6 right-10 z-50 p-3 rounded-full bg-black text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-300 `}
       >
         <FaFilter />
       </button>
