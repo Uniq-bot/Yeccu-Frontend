@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
           className="w-full h-full object-cover brightness-50 group-hover:brightness-100 transition-all duration-500"
         />
         {/* Category Badge */}
-        <span className="absolute top-2 left-2 bg-[#FFD700] text-black text-xs font-semibold px-2 py-0.5 rounded">
+        <span className="absolute top-2 left-2 bg-[#FFD700] text-black text-[12px] font-thin px-2 py-0.5 ">
           {product.category}
         </span>
       </div>
