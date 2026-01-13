@@ -5,7 +5,7 @@ import ScrollIcon from './Scroll'
 
 function Hero() {
   return (
-    <div className='relative HeroSection min-h-[93vh]'>
+    <div className='relative HeroSection min-h-[96vh]'>
       {/* background image */}
       <div
         className='absolute inset-0 bg-cover bg-center'
@@ -31,7 +31,7 @@ function Hero() {
           <Link href={'/contact'} className="btn-outline w-full sm:w-auto">JOIN TRAINING</Link>
         </div>
       </div>
-      <div className='relative z-10 flex justify-center md:justify-start px-4 sm:px-8 md:px-20 pb-6 md:pb-8'>
+      <div className=''>
         <ScrollIcon />
       </div>
     </div>
