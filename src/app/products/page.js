@@ -1,13 +1,9 @@
 "use client"
-<<<<<<< HEAD
-import React, { useStae } from 'react'
-=======
 import CategoryFilter from '@/components/Product/CategoryFilter'
 import MobileFilter from '@/components/Product/MobileFilter'
 import ProductCard from '@/components/Product/ProductCard'
 import { useProductStore } from '@/libs/useProductStore'
 import React, { useState } from 'react'
->>>>>>> f1337c738034f6b7c2e989aebdf34c138dbb4c19
 
 const Products = () => {
   const {filteredProducts}=useProductStore()
@@ -17,10 +13,10 @@ const Products = () => {
     <div className='flex relative flex-col w-full min-h-screen bg-[#111] text-white '>
       <MobileFilter />
       <div className='flex flex-col items-center  py-20 h-30 justify-center'>
-        <h1 className='text-6xl font-extrabold text-[#FFD700] py-2'>
+        <h1 className='text-5xl md:text-6xl font-extrabold text-[#FFD700] py-2'>
           <span className='text-white flex flex-col items-center justify-center'>OUR</span> PRODUCTS
       </h1>
-      <p className='text-[#99A1AF] flex items-center justify-center '>
+      <p className='text-[#99A1AF] text-s text-center md:text-xl flex items-center justify-center '>
         Premium basketball gears for Street Legends.
       </p>
       </div>
