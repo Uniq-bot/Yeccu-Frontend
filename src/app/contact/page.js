@@ -13,11 +13,11 @@ const Contact = () => {
           Ready to elevate your game? Lets Talk.
         </p>
       </div>
-      <div className='w-full flex justify-center gap-4 sm:gap-8 md:gap-10 px-4'>
-        <div className=' w-full px-5 md:w-2/5'>
+      <div className='w-full flex h-full  justify-center items-center gap-4 sm:gap-8 md:gap-10 px-4'>
+        <div className=' w-full h-full  px-5 md:w-2/5'>
           <ContactForm />
         </div>
-        <div className='hidden md:block'>
+        <div className='hidden h-full md:block'>
           <Detail />
         </div>
       </div>
