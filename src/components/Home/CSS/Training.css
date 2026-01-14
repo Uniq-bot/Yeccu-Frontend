@@ -1,0 +1,18 @@
+.Training{
+    padding: 20px;
+    background-color: #060606;
+  
+
+}
+.Training h1{
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 36px;
+    font-weight: bold;
+} 
+.Training p{
+    color: white;
+    text-align: center;
+    font-size: 18px;
+}

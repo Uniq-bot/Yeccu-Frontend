@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+
+
+body {
+  min-height: 100vh;
+  background: #000;
+  font-family: 'Inter', sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* HEADER */
+header {
+  background: #000;
+  border-bottom: 1px solid #332b00;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* NAV LAYOUT */
+nav {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+}
+
+/* LOGO */
+.logo img {
+  width: 90px;
+  cursor: pointer;
+  object-fit: contain;
+  transition: transform 0.3s ease;  
+}
+
+.logo img:hover {
+  transform: translateY(-3px);
+}
+
+/* NAV LINKS */
+.nav-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+}
+
+.nav-link li {
+  margin: 0 0.5rem;
+}
+
+.nav-link a {
+  display: block;
+  padding: 0.5rem 1rem;  
+  color: #fff;
+  font-weight: 700;
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* HOVER & ACTIVE */
+.nav-link a:hover,
+.nav-link a.active {
+  color: #FFD400;
+  transform: translateY(-3px);
+}
+
+.nav-link a.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  transform: translateX(-50%);
+  width: 50%;
+  height: 2px;
+  background: #FFD400;
+  border-radius: 2px;
+}
+
+/* USER ICON */
+.nav-user {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.nav-user a {
+  color: #fff;
+  padding: 0.5rem; 
+  display: flex;
+  align-items: center;
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* USER ICON HOVER & ACTIVE */
+.nav-user a:hover,
+.nav-user a.active {
+  color: #FFD400;
+  transform: translateY(-2px);
+}
+
+.nav-user a.active::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 2px;
+  background: #FFD400;
+  border-radius: 2px;
+}
+
+
+
+
+.Icon {
+font-size: 1.5rem;  
+  cursor: pointer;
+  display: none;
+}
+
+@media (max-width: 768px) {
+
+  nav {
+    position: relative;
+  }
+
+  .nav-user {
+    justify-content: flex-end;
+  }
+
+  .Icon {
+    display: block;
+  }
+
+  .container .nav-link {
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: black;
+    position: absolute;
+    width: 100%;
+    max-width: 350px;
+    height: 60vh;
+    right: -900px;
+    top: 90px;
+    z-index: 10;
+    transition: right 0.4s ease;
+    border: 1px solid #332b00 ;
+  }
+
+  .nav-link.active {
+    right: -20px;
+  }
+}
