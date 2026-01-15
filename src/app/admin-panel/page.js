@@ -8,7 +8,7 @@ const page = () => {
   return (
     <div className='text-black w-full bg-black min-h-screen text-white'>
         <AdminNav />
-       <div className='w-4/5 m-auto h-screen bg-red-300'>
+       <div className='w-4/5 m-auto h-screen '>
          <div>
             <Menu />
         </div>
