@@ -1,16 +1,36 @@
 "use client"
+import { Search } from 'lucide-react';
 import React, { useState } from 'react'
 
-const PostSearch = () => {
-    const [namePost, setNamePost] =useState("");
+const PostSearch = ({ allBlogs, setFilteredBlogs }) => {
+    const [namePost, setNamePost] = useState("");
+    const [isActive, setIsActive] = useState(false);
+    
+    const handleChange = (e) => {
+        const value = e.target.value;
+        setNamePost(value);
+        
+        if (value.trim() === '') {
+            setFilteredBlogs(allBlogs);
+        } else {
+            const filtered = allBlogs.filter(blog => 
+                blog.title.toLowerCase().includes(value.toLowerCase())
+            );
+            setFilteredBlogs(filtered);
+        }
+    }
+    
   return (
-    <div>
+    <div className={`w-full pl-6 py-2.5 flex items-center p-2 border ${isActive ? 'border-yellow-300' : 'border-yellow-500 '}  `}>
+      <Search />
         <input 
             type="text" 
             value={namePost}
-            onChange={(e) => setNamePost(e.target.value)}
+            onChange={handleChange}
+            onFocus={() => setIsActive(true)}
+            onBlur={() => setIsActive(false)}
             placeholder="Search posts..."
-            className="w-full p-2 border border-gray-300 rounded"
+            className="pl-4 w-full bg-transparent outline-none border-none text-white placeholder-gray-400 ml-2"
         />
     </div>
   )
