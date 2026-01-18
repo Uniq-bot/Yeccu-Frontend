@@ -1,0 +1,121 @@
+.Training {
+  background: #0b0b0b;
+  color: #ffffff;
+  padding: 80px 6%;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.Training h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.Training .yellow {
+  color: #ffd400;
+}
+
+.Training p {
+  color: #bfbfbf;
+  margin-bottom: 60px;
+  font-size: 1.05rem;
+}
+
+.training_container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.Youth_training,
+.Advanced_training,
+.Team_camps {
+  border: 1px solid rgba(255, 212, 0, 0.4);
+  padding: 40px 30px;
+  text-align: left;
+  position: relative;
+  transition: all 0.3s ease;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 212, 0, 0.05),
+    rgba(0, 0, 0, 0.9)
+  );
+}
+
+.Youth_training:hover,
+.Advanced_training:hover,
+.Team_camps:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 0 25px rgba(255, 212, 0, 0.25);
+}
+
+.Youth_training h2,
+.Advanced_training h2,
+.Team_camps h2 {
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+
+.Youth_training p,
+.Advanced_training p,
+.Team_camps p {
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+  color: #cfcfcf;
+}
+
+
+.training_container ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 35px;
+}
+
+.training_container ul li {
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.training_container ul li::before {
+  content: "■";
+  color: #ffd400;
+  position: absolute;
+  left: 0;
+  font-size: 0.6rem;
+  top: 4px;
+}
+
+
+.training_container button {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 2px solid #ffd400;
+  color: #ffd400;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.training_container button:hover {
+  background: #ffd400;
+  color: #000;
+}
+
+
+@media (max-width: 768px) {
+  .Training h1 {
+    font-size: 2.3rem;
+  }
+
+  .Training {
+    padding: 60px 4%;
+  }
+}
