@@ -1,4 +1,6 @@
+import axios from "axios";
 import { create } from "zustand";
+import instance from "./axios";
 
 const products = [
   {
@@ -116,6 +118,24 @@ export const useProductStore = create((set, get) => ({
   categories: categories,
   products: products,
   filteredProducts: products,
+  fetchPosts: async () => {
+    set({ isLoading: true });
+    try {
+      // Simulate API call delay
+      const res= await instance.get("/api/v1/posts");
+      const reg= await instance.post("/api/v1/auth/signin",{
+        username:"Bigyaan",
+        password:"password123"
+      });
+      console.log(reg)
+      console.log("Fetched posts:", res.data);
+      // Here you can process and set the fetched data as needed
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
   setFilteredProducts: (filteredProducts) => set({ filteredProducts }),
   setCurrentCategory: (category) => {
     set({ currentCategory: category });
