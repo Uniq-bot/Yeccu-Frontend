@@ -124,8 +124,8 @@ export const useProductStore = create((set, get) => ({
       // Simulate API call delay
       const res= await instance.get("/api/v1/posts");
       const reg= await instance.post("/api/v1/auth/signin",{
-        username:"Bigyaan",
-        password:"password123"
+          username:"Bigyaan",
+          password:"password123"
       });
       console.log(reg)
       console.log("Fetched posts:", res.data);
