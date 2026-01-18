@@ -7,11 +7,8 @@ import { useProductStore } from '@/libs/useProductStore'
 
 
 const Homee = () => {
-  const {fetchPosts}= useProductStore()
 
-  React.useEffect(() => {
-    fetchPosts();
-  }, []);
+
   return (
     <div>
       <Hero/>
