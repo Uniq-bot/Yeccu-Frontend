@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 export default function ClientLayout({ children }) {
   const pathname = usePathname()
   const router = useRouter()
-  const hideNavbar = pathname === '/admin-panel'
+  const hideNavbarFooter = pathname === '/admin-panel' || pathname === '/login' || pathname === '/register'
   const { isAdmin } = useAuthStore();
 
   useEffect(() => {
@@ -23,10 +23,10 @@ export default function ClientLayout({ children }) {
 
   return (
     <>
-      {!hideNavbar && <Navbar />}
+      {!hideNavbarFooter && <Navbar />}
       {children}
-      {isAdmin && !hideNavbar && <DashButton />}
-      {!hideNavbar && <Footer />}
+      {isAdmin && !hideNavbarFooter && <DashButton />}
+      {!hideNavbarFooter && <Footer />}
     </>
   )
 }

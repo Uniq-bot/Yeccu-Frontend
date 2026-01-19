@@ -1,13 +1,48 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from '../../assets/yeccu.jpg'
 import Image from "next/image";
+import { useAuthStore } from "@/libs/auth";
+
 const Navbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { token } = useAuthStore();
+  const [basketballName, setBasketballName] = useState("");
+
+  // Basketball-related random names
+  const basketballNames = [
+    "The Alley Oop",
+    "The Slam Dunker",
+    "The Crossover King",
+    "The Ball Hawk",
+    "The Three-Point Threat",
+    "The Assist Master",
+    "The Defense Anchor",
+    "The Buzzer Beater",
+    "The Fast Break",
+    "The Rebound Artist",
+    "The Pick & Roll",
+    "The Fadeaway",
+    "The Lockdown",
+    "The Glass Cleaner",
+    "The Stepback",
+    "The Poster",
+    "The Swish",
+    "The Fast Breaker",
+    "The Block Master",
+    "The Steal Artist"
+  ];
+
+  useEffect(() => {
+    if (token && !basketballName) {
+      const randomName = basketballNames[Math.floor(Math.random() * basketballNames.length)];
+      setBasketballName(randomName);
+    }
+  }, [token, basketballName]);
 
   const normalize = (p) => (p === "/" ? "/" : p.replace(/\/$/, ""));
 
@@ -51,26 +86,47 @@ const Navbar = () => {
           </ul>
 
           <div className="flex items-center gap-4">
-            <Link
-              href="/login"
-              aria-label="Login"
-              className={`hidden md:flex items-center text-white transition-colors duration-200 hover:text-yellow-400 ${isActive('/login') ? 'text-yellow-400' : ''}`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            {token ? (
+              <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-md bg-yellow-400/10 border border-yellow-400/30">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-yellow-400"
+                >
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <span className="text-white font-semibold text-sm">{basketballName}</span>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                aria-label="Login"
+                className={`hidden md:flex items-center text-white transition-colors duration-200 hover:text-yellow-400 ${isActive('/login') ? 'text-yellow-400' : ''}`}
               >
-                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            </Link>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </Link>
+            )}
 
             <button
               type="button"
@@ -107,31 +163,56 @@ const Navbar = () => {
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link
-                  href="/login"
-                  onClick={() => setIsOpen(false)}
-                  className={`flex items-center gap-2 rounded-md px-2 py-2 transition-colors duration-150 hover:bg-white/5 ${isActive('/login') ? 'text-yellow-400' : 'text-white'}`}
-                >
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-yellow-900/50 bg-black/60">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                      <circle cx="12" cy="7" r="4" />
-                    </svg>
-                  </span>
-                  Login
-                </Link>
-              </li>
+              {token ? (
+                <li>
+                  <div className="flex items-center gap-2 rounded-md px-2 py-2 bg-yellow-400/10 border border-yellow-400/30">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-yellow-400/50 bg-black/60">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-yellow-400"
+                      >
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                      </svg>
+                    </span>
+                    <span className="text-white font-semibold text-sm">{basketballName}</span>
+                  </div>
+                </li>
+              ) : (
+                <li>
+                  <Link
+                    href="/login"
+                    onClick={() => setIsOpen(false)}
+                    className={`flex items-center gap-2 rounded-md px-2 py-2 transition-colors duration-150 hover:bg-white/5 ${isActive('/login') ? 'text-yellow-400' : 'text-white'}`}
+                  >
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-yellow-900/50 bg-black/60">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                      </svg>
+                    </span>
+                    Login
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
         </div>
