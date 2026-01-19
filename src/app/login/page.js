@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const { login } = useAuthStore();
+  const { login, user, setUser } = useAuthStore();
   const router = useRouter();
 
   const handleLogin = async (e) => {
@@ -26,6 +26,7 @@ export default function LoginPage() {
     setLoading(false);
 
     if (result?.success) {
+      window.location.reload();
       router.push("/");
     } else {
       setError(result?.message || "Login failed. Please try again.");

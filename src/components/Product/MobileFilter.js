@@ -5,7 +5,7 @@ import { FaFilter, FaTimes } from 'react-icons/fa'
 import { useProductStore } from '@/libs/useProductStore'
 const MobileFilter = () => {
   const [showFilter, setShowFilter] = React.useState(false);
-  const { categories, currentCategory, setCurrentCategory, filterProductsByCategory } = useProductStore();
+  const { categories, currentCategory, setCurrentCategory } = useProductStore();
 
   React.useEffect(() => {
     // lock body scroll when filter is open
@@ -19,8 +19,8 @@ const MobileFilter = () => {
   const close = () => setShowFilter(false);
 
   const handleCategory = (category) => {
-    setCurrentCategory(category);
-    filterProductsByCategory();
+    const categoryId = category === "All" ? "All" : category.categoryId;
+    setCurrentCategory(categoryId);
     close();
   };
 
@@ -76,18 +76,30 @@ const MobileFilter = () => {
               <div className="p-4">
                 <p className="text-sm text-[#99A1AF] mb-2">Categories</p>
                 <div className="flex flex-wrap gap-2">
-                  {categories.map((cat, i) => (
+                  <button
+                    onClick={() => handleCategory("All")}
+                    aria-pressed={currentCategory === "All"}
+                    className={`px-4 py-2 rounded-md text-sm transition-colors transition-transform active:translate-y-1 ${
+                      currentCategory === "All"
+                        ? 'bg-amber-300 text-black shadow'
+                        : 'bg-transparent text-amber-300 border border-amber-300'
+                    }`}
+                  >
+                    All
+                  </button>
+
+                  {categories.map((cat) => (
                     <button
-                      key={i}
+                      key={cat.categoryId}
                       onClick={() => handleCategory(cat)}
-                      aria-pressed={currentCategory === cat}
+                      aria-pressed={currentCategory === cat.categoryId}
                       className={`px-4 py-2 rounded-md text-sm transition-colors transition-transform active:translate-y-1 ${
-                        currentCategory === cat
+                        currentCategory === cat.categoryId
                           ? 'bg-amber-300 text-black shadow'
                           : 'bg-transparent text-amber-300 border border-amber-300'
                       }`}
                     >
-                      {cat}
+                      {cat.categoryTitle}
                     </button>
                   ))}
                 </div>

@@ -3,10 +3,15 @@ import CategoryFilter from '@/components/Product/CategoryFilter'
 import MobileFilter from '@/components/Product/MobileFilter'
 import ProductCard from '@/components/Product/ProductCard'
 import { useProductStore } from '@/libs/useProductStore'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 const Products = () => {
-  const {filteredProducts}=useProductStore()
+  const { filteredProducts, isLoading, initializeProducts } = useProductStore()
+  
+  useEffect(() => {
+    initializeProducts();
+  }, []);
+  
   console.log(filteredProducts)
   
   return (
@@ -21,10 +26,13 @@ const Products = () => {
       </p>
       </div>
       <div className='px-6 md:px-12 lg:px-20 pb-20'>
-        <CategoryFilter />
+          <CategoryFilter />
         <div className='mt-8'>
-          {
-            filteredProducts.length === 0 ? (
+          {isLoading ? (
+            <div className='flex flex-col items-center justify-center py-20'>
+              <p className='text-center text-[#99A1AF] text-xl'>Loading products...</p>
+            </div>
+          ) : filteredProducts && filteredProducts.length === 0 ? (
               <div className='flex flex-col items-center justify-center py-20'>
                 <p className='text-center text-[#99A1AF] text-xl'>No products found in this category.</p>
               </div>
@@ -36,9 +44,9 @@ const Products = () => {
               </div>
             )
           }
-        </div>
       </div>
 
+    </div>
     </div>
   )
 }

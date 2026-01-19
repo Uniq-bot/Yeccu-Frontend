@@ -9,10 +9,12 @@ import { useAuthStore } from "@/libs/auth";
 const Navbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
+  const [showBtn, setShowBtn] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  const { token } = useAuthStore();
+  const { token, user } = useAuthStore();
   const [basketballName, setBasketballName] = useState("");
-
+  const router=usePathname();
   // Basketball-related random names
   const basketballNames = [
     "The Alley Oop",
@@ -38,6 +40,10 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (token && !basketballName) {
       const randomName = basketballNames[Math.floor(Math.random() * basketballNames.length)];
       setBasketballName(randomName);
@@ -57,11 +63,18 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
   };
+  const toggleLGbutton=()=>{
+    setShowBtn(!showBtn);
+  }
+  const handleLogout=()=>{
+    localStorage.removeItem("token");
+    window.location.href = '/';
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-black border-b border-yellow-900/50">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6  ">
-        <nav className="flex h-16 items-center justify-between gap-4">
+      <div className="mx-auto  px-4 sm:px-6  ">
+        <nav className="flex h-16  w-full  items-center justify-between gap-4">
 
           <div className="flex items-center">
             <Link href="/" className={`flex items-center transition-transform duration-200 ${isActive('/') ? '' : ''}`}>
@@ -69,7 +82,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <ul className="hidden md:flex items-center gap-6 text-sm font-semibold uppercase tracking-wide">
+          <ul className="hidden md:flex ml-30 select-none justify-center items-center gap-6 text-sm font-semibold uppercase tracking-wide">
             {[{ href: '/', label: 'Home' }, { href: '/products', label: 'Products' }, { href: '/blogs', label: 'Blog' }, { href: '/contact', label: 'Contact' }].map((item) => (
               <li key={item.href}>
                 <Link
@@ -85,9 +98,10 @@ const Navbar = () => {
             ))}
           </ul>
 
-          <div className="flex items-center gap-4">
-            {token ? (
-              <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-md bg-yellow-400/10 border border-yellow-400/30">
+          <div className="flex items-center justify-center gap-4">
+            {mounted && token ? (
+              <div className="relative">
+                <div onClick={toggleLGbutton} className="hidden md:flex items-center gap-2 px-3 py-2 rounded-md bg-yellow-400/10 border border-yellow-400/30">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -103,9 +117,16 @@ const Navbar = () => {
                   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
-                <span className="text-white font-semibold text-sm">{basketballName}</span>
+                <span className="text-white select-none uppercase font-semibold text-sm">{user}</span>
               </div>
-            ) : (
+              <div
+                onClick={() => handleLogout()}
+                className={`absolute left-1/2 -translate-x-1/2 mt-2 px-4 py-1 rounded font-bold text-sm bg-yellow-400 text-black shadow-lg transition-all duration-200 ease-out transform ${showBtn ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 -translate-y-2 scale-95 pointer-events-none'}`}
+              >
+                Logout
+              </div>
+                </div>
+            ) : mounted ? (
               <Link
                 href="/login"
                 aria-label="Login"
@@ -126,7 +147,7 @@ const Navbar = () => {
                   <circle cx="12" cy="7" r="4" />
                 </svg>
               </Link>
-            )}
+            ) : null}
 
             <button
               type="button"
@@ -165,7 +186,7 @@ const Navbar = () => {
               ))}
               {token ? (
                 <li>
-                  <div className="flex items-center gap-2 rounded-md px-2 py-2 bg-yellow-400/10 border border-yellow-400/30">
+                  <div onClick={()=>handleLogout()} className="flex items-center gap-2 rounded-md px-2 py-2 bg-yellow-400/10 border border-yellow-400/30">
                     <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-yellow-400/50 bg-black/60">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -183,7 +204,7 @@ const Navbar = () => {
                         <circle cx="12" cy="7" r="4" />
                       </svg>
                     </span>
-                    <span className="text-white font-semibold text-sm">{basketballName}</span>
+                    <span className="text-white  font-semibold text-sm">{user}</span>
                   </div>
                 </li>
               ) : (

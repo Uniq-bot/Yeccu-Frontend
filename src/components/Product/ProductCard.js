@@ -1,30 +1,34 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useProductStore } from "@/libs/useProductStore";
 
 const ProductCard = ({ product }) => {
+  const {categories}=useProductStore()
+  const getCategory = (categoryId) => {
+    const category = categories.find(cat => cat.categoryId === categoryId);
+    return category ? category.categoryTitle : "Unknown"; 
+  }
   return (
     <div className="group cursor-pointer flex justify-between flex-col relative bg-[#1a1a1a] overflow-hidden border border-[#333] transition-all duration-300 hover:-translate-y-1 w-full">
       {/* Product Image */}
       <div className="relative w-full h-40 sm:h-48 md:h-56 lg:h-64 bg-[#222] overflow-hidden">
         <img
-          src={product.image}
-          alt={product.name}
+          src={product.productImage}
+          alt={product.productName}
           className="w-full h-full object-cover brightness-50 group-hover:brightness-100 transition-all duration-500"
         />
         {/* Category Badge */}
         <span className="absolute top-2 left-2 bg-[#FFD700] text-black text-[12px] font-thin px-2 py-0.5 ">
-          {product.category}
+          {getCategory(product.categoryId)}
         </span>
       </div>
 
       <div className="p-3 flex flex-col gap-1">
         <h3 className="text-white font-semibold text-base md:text-lg line-clamp-1 group-hover:text-[#FFD700] transition-colors">
-          {product.name}
+          {product.productName}
         </h3>
-        <p className="text-[#99A1AF] text-xs md:text-sm line-clamp-2">
-          {product.description}
-        </p>
+
 
         <div className="flex items-center justify-between mt-2">
           <span className="text-[#FFD700] font-bold text-lg">
