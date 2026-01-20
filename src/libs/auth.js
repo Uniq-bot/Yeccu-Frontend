@@ -6,13 +6,13 @@ const getStoredToken = () => (typeof window !== 'undefined' ? localStorage.getIt
 function isTokenExpired() {
   if (typeof window === 'undefined') return true;
   
-  const refreshToken = localStorage.getItem("refreshToken");
+  const token = localStorage.getItem("token");
 
   // No token at all
-  if (!refreshToken) return true;
+  if (!token) return true;
 
   try {
-    const parts = refreshToken.split(".");
+    const parts = token.split(".");
     if (parts.length !== 3) return true;
 
     const payload = JSON.parse(atob(parts[1]));
@@ -27,20 +27,37 @@ function isTokenExpired() {
     return true;
   }
 }
-
-function getUserFromToken() {
-  if (typeof window === 'undefined') return null;
+const getRole=()=>{
+ if (typeof window === 'undefined') return true;
   
-  const refreshToken = localStorage.getItem("refreshToken");
-  
-  if (!refreshToken) return null;
-
-  try {
-    const parts = refreshToken.split(".");
+  const token = localStorage.getItem("token");
+    if (!token) return null;
+    try {
+    const parts = token.split(".");
     if (parts.length !== 3) return null;
 
     const payload = JSON.parse(atob(parts[1]));
-    console.log(payload.sub)
+    console.log("role is", payload.roles[0])
+    return payload.roles[0] || null;
+  } catch (error) {
+    return null;
+  }
+}
+function getUserFromToken() {
+  if (typeof window === 'undefined') return null;
+  
+  const token = localStorage.getItem("token");
+  
+  if (!token) return null;
+
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+    console.log(parts)
+    const tw0=JSON.parse(atob(parts[0]));
+    console.log(tw0)
+    const payload = JSON.parse(atob(parts[1]));
+    console.log(payload.roles[0])
     return payload.sub || null;
   } catch (error) {
     return null;
@@ -48,6 +65,7 @@ function getUserFromToken() {
 }
 
 export const useAuthStore = create((set) => ({
+    isAdmin:getRole()==="ADMIN"?true:false,
     isAuthenticated: !isTokenExpired() && !!getStoredToken(),
     user: getUserFromToken(),
     token: getStoredToken(),
@@ -61,7 +79,7 @@ export const useAuthStore = create((set) => ({
             if (!token) throw new Error("No token returned from server");
             
             localStorage.setItem("token", token);
-            localStorage.setItem('refreshToken', loginRes.data.refreshToken);
+            localStorage.setItem('token', loginRes.data.token);
             set({ token, isAuthenticated: true });
             return { success: true };
         } catch (error) {

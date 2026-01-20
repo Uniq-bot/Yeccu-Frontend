@@ -12,7 +12,7 @@ export default function ClientLayout({ children }) {
   const router = useRouter()
   const hideNavbarFooter = pathname === '/admin-panel' || pathname === '/login' || pathname === '/register'
   const { isAdmin } = useAuthStore();
-
+  console.log("is admin???: ", isAdmin)
   useEffect(() => {
     // Only redirect from admin-panel if not authenticated
     if (pathname === '/admin-panel' && !isAdmin) {
