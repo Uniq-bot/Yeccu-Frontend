@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Logo from '../../assets/yeccu.jpg'
 import Image from "next/image";
 import { useAuthStore } from "@/libs/auth";
+import DashButton from "./DashButton";
 
 const Navbar = () => {
 
@@ -12,44 +13,15 @@ const Navbar = () => {
   const [showBtn, setShowBtn] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  const { token, user } = useAuthStore();
+  const { token, user, isAdmin } = useAuthStore();
   const [basketballName, setBasketballName] = useState("");
   const router=usePathname();
-  // Basketball-related random names
-  const basketballNames = [
-    "The Alley Oop",
-    "The Slam Dunker",
-    "The Crossover King",
-    "The Ball Hawk",
-    "The Three-Point Threat",
-    "The Assist Master",
-    "The Defense Anchor",
-    "The Buzzer Beater",
-    "The Fast Break",
-    "The Rebound Artist",
-    "The Pick & Roll",
-    "The Fadeaway",
-    "The Lockdown",
-    "The Glass Cleaner",
-    "The Stepback",
-    "The Poster",
-    "The Swish",
-    "The Fast Breaker",
-    "The Block Master",
-    "The Steal Artist"
-  ];
-
+ const hideDashboard = pathname === '/admin-panel' || pathname === '/login' || pathname === '/register'
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (token && !basketballName) {
-      const randomName = basketballNames[Math.floor(Math.random() * basketballNames.length)];
-      setBasketballName(randomName);
-    }
-  }, [token, basketballName]);
-
+ 
   const normalize = (p) => (p === "/" ? "/" : p.replace(/\/$/, ""));
 
   const isActive = (href) => {
@@ -98,34 +70,66 @@ const Navbar = () => {
             ))}
           </ul>
 
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center  justify-center gap-4">
             {mounted && token ? (
-              <div className="relative">
-                <div onClick={toggleLGbutton} className="hidden md:flex items-center gap-2 px-3 py-2 rounded-md bg-yellow-400/10 border border-yellow-400/30">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-yellow-400"
-                >
-                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
-                <span className="text-white select-none uppercase font-semibold text-sm">{user}</span>
-              </div>
-              <div
-                onClick={() => handleLogout()}
-                className={`absolute left-1/2 -translate-x-1/2 mt-2 px-4 py-1 rounded font-bold text-sm bg-yellow-400 text-black shadow-lg transition-all duration-200 ease-out transform ${showBtn ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' : 'opacity-0 -translate-y-2 scale-95 pointer-events-none'}`}
-              >
-                Logout
-              </div>
+              <div className="relative flex gap-3 ">
+                <div className="relative">
+                  <button
+                    onClick={toggleLGbutton}
+                    className="hidden md:flex items-center gap-2 px-3 py-2 rounded-md bg-yellow-400/10 border border-yellow-400/30 hover:bg-yellow-400/20 transition-colors duration-200"
+                    aria-label="User menu"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-yellow-400"
+                    >
+                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <span className="text-white select-none uppercase font-semibold text-sm">{user}</span>
+                  </button>
+                  
+                  {/* Logout Dropdown Menu */}
+                  <div className={`absolute right-0 mt-2 w-48 bg-black border border-yellow-400/30 rounded-md shadow-lg z-50 overflow-hidden transition-all duration-200 ease-out transform origin-top-right ${showBtn ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'}`}>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setShowBtn(false);
+                      }}
+                      className="w-full px-4 py-3 text-left text-yellow-400 font-semibold hover:bg-yellow-400/10 transition-colors duration-150 flex items-center gap-2"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                      </svg>
+                      Logout
+                    </button>
+                  </div>
                 </div>
+           
+                <div>
+                  {isAdmin && !hideDashboard && <DashButton />}
+                </div>
+              </div>
             ) : mounted ? (
               <Link
                 href="/login"
@@ -207,6 +211,7 @@ const Navbar = () => {
                     <span className="text-white  font-semibold text-sm">{user}</span>
                   </div>
                 </li>
+                
               ) : (
                 <li>
                   <Link
@@ -234,6 +239,9 @@ const Navbar = () => {
                   </Link>
                 </li>
               )}
+              <li>
+                {isAdmin && !hideDashboard && <DashButton />}
+              </li>
             </ul>
           </div>
         </div>

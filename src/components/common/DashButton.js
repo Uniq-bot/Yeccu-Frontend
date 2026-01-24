@@ -4,7 +4,7 @@ import React from 'react'
 
 const DashButton = () => {
   return (
-    <Link  href="/admin-panel" className="fixed bottom-6 right-6 bg-yellow-400 text-black px-5 py-3 rounded-full shadow-lg hover:bg-yellow-500 transition-colors duration-200 flex items-center gap-2 z-50">
+    <Link  href="/admin-panel" className="hidden md:flex items-center gap-2 px-3 py-2 rounded-md bg-yellow-400/10 border border-yellow-400/30 text-white select-none uppercase font-semibold text-sm">
         DashBoard
     </Link>
   )

@@ -11,7 +11,7 @@ function Detail() {
         <h2 className="mt-5 px-5 py-3 text-center bg-black text-yellow-400 text-xs font-bold">CHAT ON WHATSAPP</h2>
       </div>
 
-      <div className="bg-gray-900 text-white flex flex-col gap-4 py-5 px-3 border border-gray-700">
+      <div className="bg-[#111] text-white flex flex-col gap-4 py-5 px-3 border border-gray-700">
         <h1 className="text-2xl font-extrabold text-yellow-400">CONTACT INFO</h1>
         <div className="flex flex-col gap-1">
           <h2 className="text-sm font-bold text-yellow-400">EMAIL</h2>

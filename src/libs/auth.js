@@ -69,6 +69,7 @@ export const useAuthStore = create((set) => ({
     isAuthenticated: !isTokenExpired() && !!getStoredToken(),
     user: getUserFromToken(),
     token: getStoredToken(),
+    authorized:getRole()==="ADMIN"?true:false,
     setUser: (user) => set({ user }),
     login: async (formData) => {
         try {
