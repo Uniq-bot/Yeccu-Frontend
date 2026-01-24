@@ -1,11 +1,17 @@
 'use client'
+import CategoryFilterBlogs from '@/components/Blog/CategoryFilterBlogs';
 import Navbar from '@/components/common/Navbar';
+import { useBlogStore } from '@/libs/useBlogStore';
 import { Calendar } from 'lucide-react';
 import React from 'react'
 import { useState } from 'react';
 
 
 const Blogs = () => {
+  const {initializeBlogs}=useBlogStore();
+  React.useEffect(()=>{
+    initializeBlogs();
+  },[initializeBlogs]);
   const [selectedBlog, setSelectedBlog] = useState(null);
   const Blogs = [
   {
