@@ -59,5 +59,93 @@ export const useProductStore = create((set, get) => ({
   
   setIsLoading: (isLoading) => set({ isLoading }),
   
-  
+  createProduct: async (productData) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Please login again");
+
+      const authHeader = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
+
+      // Create ProductDto object
+      const product = {
+        productName: productData.productName,
+        description: productData.description,
+        price: productData.price,
+        categoryId: productData.categoryId
+      };
+
+      // Create FormData with exact part names expected by backend
+      const formData = new FormData();
+      formData.append(
+          "product",
+          new Blob([JSON.stringify(product)], { type: "application/json" })
+      );
+      
+      if (productData.image) {
+          formData.append("image", productData.image);
+      }
+
+      const response = await fetch("https://surrounding-willi-yeccu-46ade4dd.koyeb.app/api/v1/admin/products", {
+          method: "POST",
+          headers: {
+              Authorization: authHeader
+          },
+          body: formData
+      });
+
+      if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          console.error("Backend validation error:", errorData);
+          throw new Error(errorData.message || `HTTP ${response.status}: Failed to create product`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      throw new Error(
+          error.message ||
+              "Failed to create product"
+      );
+    }
+  },
+
+deleteProduct: async (productId) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("Please login again");
+
+    const authHeader = token.startsWith("Bearer ")
+      ? token
+      : `Bearer ${token}`;
+
+    const response = await fetch(
+      `https://surrounding-willi-yeccu-46ade4dd.koyeb.app/api/v1/admin/products/${productId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: authHeader,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.message || `HTTP ${response.status}: Failed to delete product`
+      );
+    }
+
+    // 🔥 UPDATE STORE STATE
+    set((state) => ({
+      products: state.products.filter((p) => p._id !== productId),
+      filteredProducts: state.filteredProducts.filter(
+        (p) => p._id !== productId
+      ),
+    }));
+
+    return true;
+  } catch (error) {
+    throw new Error(error.message || "Failed to delete product");
+  }
+},
+
 }));

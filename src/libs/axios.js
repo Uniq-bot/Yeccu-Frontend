@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "https://technical-tybie-sochnex-8239cb23.koyeb.app",
+  baseURL: "https://surrounding-willi-yeccu-46ade4dd.koyeb.app",
 
 });
 

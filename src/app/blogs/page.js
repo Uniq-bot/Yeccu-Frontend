@@ -1,6 +1,7 @@
 'use client'
 import CategoryFilterBlogs from '@/components/Blog/CategoryFilterBlogs';
 import Navbar from '@/components/common/Navbar';
+import { motion } from 'framer-motion';
 import { useBlogStore } from '@/libs/useBlogStore';
 import { Calendar } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
@@ -40,7 +41,14 @@ const Blogs = () => {
   return (
     <div>
       <main className={`max-w-7xl ${currBlogState? "hidden" : ""} min-h-200 mx-auto px-4 sm:px-6 lg:px-8 py-12`}>
-        <h1 className="text-5xl font-bold mb-8 ">YECCU<span className="text-amber-400"> BLOGS</span></h1>
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-5xl font-bold mb-8 "
+        >
+          YECCU<span className="text-amber-400"> BLOGS</span>
+        </motion.h1>
         <div className="mb-8">
           <CategoryFilterBlogs
             categories={blogCategories}
@@ -56,8 +64,16 @@ const Blogs = () => {
           <p className="text-gray-400">Loading blogs...</p>
         ) : visibleBlogs?.length ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {visibleBlogs.map((blog) => (
-              <div key={blog.postId ?? blog.id} className="border-[0.5px] border-[#FFD700] p-0 hover:shadow-lg transition-shadow duration-300">
+            {visibleBlogs.map((blog, index) => (
+              <motion.div 
+                key={blog.postId ?? blog.id} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.4, delay: index * 0.03 }}
+                whileHover={{ y: -8, transition: { duration: 0.2 } }}
+                className="border-[0.5px] border-[#FFD700] p-0 shadow-lg"
+              >
                 <div className='relative w-full h-40 sm:h-48 md:h-56 lg:h-64 overflow-hidden p-0'>
                   <img src={blog.imageName || `/blogimage${blog.postId ?? blog.id}.jpg`} alt={blog.title} className="w-full h-full object-cover mb-4 " />
                   <span className="absolute top-2 left-2 bg-[#FFD700] font-semibold text-black text-[12px] px-2 py-0.5 ">
@@ -72,7 +88,7 @@ const Blogs = () => {
                     Read More
                   </button>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         ) : (

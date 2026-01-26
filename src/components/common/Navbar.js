@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import Logo from '../../assets/yeccu.jpg'
 import Image from "next/image";
 import { useAuthStore } from "@/libs/auth";
@@ -44,13 +45,20 @@ const Navbar = () => {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-black border-b border-yellow-900/50">
+    <motion.header 
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
+      className="sticky top-0 z-50 bg-black border-b border-yellow-900/50"
+    >
       <div className="mx-auto  px-4 sm:px-6  ">
         <nav className="flex h-16  w-full  items-center justify-between gap-4">
 
           <div className="flex items-center">
             <Link href="/" className={`flex items-center transition-transform duration-200 ${isActive('/') ? '' : ''}`}>
-              <Image src={Logo} alt="Yeccu Baskets Logo" width={50} height={50} className="h-auto object-contain" />
+              <motion.div whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.95 }}>
+                <Image src={Logo} alt="Yeccu Baskets Logo" width={50} height={50} className="h-auto object-contain" />
+              </motion.div>
             </Link>
           </div>
 
@@ -246,7 +254,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 };
 

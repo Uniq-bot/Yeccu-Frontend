@@ -1,8 +1,18 @@
 'use client'
 import React, { useState } from 'react'
+import { useBlogStore } from '@/libs/useBlogStore'
+import CategorySelector from '../../Categories/categorySelector/CategorySelector'
 
 const EditBlog = ({ blog, onClose, onSave }) => {
-  const [formData, setFormData] = useState(blog)
+  const [formData, setFormData] = useState({
+    title: blog.title || '',
+    content: blog.content || '',
+    categoryId: blog.categoryId || '',
+    image: null
+  })
+  const [error, setError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { updatePost, uploadPostImage } = useBlogStore()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -12,28 +22,94 @@ const EditBlog = ({ blog, onClose, onSave }) => {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleImageChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      image: e.target.files[0]
+    }))
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    onSave(formData)
+    setError('')
+
+    if (!formData.title.trim()) {
+      setError('Please enter a post title')
+      return
+    }
+
+    if (!formData.content.trim()) {
+      setError('Please enter post content')
+      return
+    }
+
+    if (!formData.categoryId) {
+      setError('Please select a category')
+      return
+    }
+
+    setIsSubmitting(true)
+    try {
+      // Update post content first (JSON)
+      const postData = {
+        title: formData.title.trim(),
+        content: formData.content.trim(),
+        categoryId: formData.categoryId
+      }
+      
+      console.log("Sending update for post:", blog.postId, postData);
+      await updatePost(blog.postId, postData)
+      console.log("Post updated successfully");
+
+      // Upload image separately if selected - with small delay to avoid race condition
+      if (formData.image) {
+        console.log("Waiting before image upload...");
+        await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay
+        console.log("Uploading image...");
+        await uploadPostImage(blog.postId, formData.image)
+        console.log("Image uploaded successfully");
+      }
+
+      onSave({
+        ...blog,
+        title: formData.title.trim(),
+        content: formData.content.trim(),
+        categoryId: formData.categoryId
+      })
+      onClose()
+      alert('Post updated successfully!')
+    } catch (err) {
+      setError(err.message || 'Failed to update post')
+      console.error('Error updating post:', err)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
       {/* Modal */}
-      <div className="w-[380px] border-2 border-yellow-400 bg-[#111] text-white">
+      <div className="w-full max-w-md border-2 border-yellow-400 bg-[#0a0a0a] shadow-2xl max-h-[90vh] overflow-y-auto">
         
         {/* Header */}
-        <div className="flex items-center justify-between bg-yellow-400 px-4 py-3 text-black font-bold">
-          <span>EDIT POST</span>
-          <button onClick={onClose} className="text-xl">
+        <div className="flex items-center justify-between bg-yellow-400 px-4 py-3 sticky top-0">
+          <span className="text-black font-bold">EDIT POST</span>
+          <button onClick={onClose} className="text-black hover:opacity-70 transition-opacity" disabled={isSubmitting}>
             ✕
           </button>
         </div>
 
         {/* Body */}
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
+          {/* Error Message */}
+          {error && (
+            <div className='p-3 bg-red-900/30 border border-red-500 rounded text-red-400 text-sm'>
+              {error}
+            </div>
+          )}
+
           <div>
-            <label className="block text-sm text-yellow-400 mb-1">
+            <label className="block text-sm text-yellow-400 mb-1 font-bold">
               POST TITLE
             </label>
             <input
@@ -41,34 +117,47 @@ const EditBlog = ({ blog, onClose, onSave }) => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full bg-black border border-yellow-400 px-3 py-2 outline-none text-white"
+              disabled={isSubmitting}
+              className="w-full bg-black border border-yellow-400 px-3 py-2 outline-none text-white focus:border-yellow-300 disabled:opacity-50"
             />
           </div>
 
           <div>
-            <label className="block text-sm text-yellow-400 mb-1">
-              CATEGORY
+            <label className="block text-sm text-yellow-400 mb-1 font-bold">
+              CONTENT
             </label>
-            <input
-              type="text"
-              name="category"
-              value={formData.category}
+            <textarea
+              name="content"
+              value={formData.content}
               onChange={handleChange}
-              className="w-full bg-black border border-yellow-400 px-3 py-2 outline-none text-white"
+              disabled={isSubmitting}
+              className="w-full bg-black border border-yellow-400 px-3 py-2 outline-none text-white focus:border-yellow-300 disabled:opacity-50 min-h-24"
             />
           </div>
 
           <div>
-            <label className="block text-sm text-yellow-400 mb-1">
-              DATE
+            <CategorySelector
+              value={formData.categoryId}
+              onChange={(value) => setFormData(prev => ({ ...prev, categoryId: value }))}
+              type="blog"
+              label="Category"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-yellow-400 mb-1 font-bold">
+              UPDATE IMAGE (Optional)
             </label>
             <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              className="w-full bg-black border border-yellow-400 px-3 py-2 outline-none text-white"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              disabled={isSubmitting}
+              className="w-full bg-black border border-yellow-400 px-3 py-2 outline-none text-white focus:border-yellow-300 disabled:opacity-50 file:bg-yellow-400 file:text-black file:border-0 file:px-2 file:py-1 file:rounded file:cursor-pointer file:font-bold"
             />
+            {formData.image && (
+              <p className="text-xs text-zinc-400 mt-2">Selected: {formData.image.name}</p>
+            )}
           </div>
 
           {/* Footer */}
@@ -76,12 +165,24 @@ const EditBlog = ({ blog, onClose, onSave }) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 border border-gray-500 py-2 text-gray-300 hover:bg-gray-800"
+              disabled={isSubmitting}
+              className="flex-1 border border-gray-500 py-2 text-gray-300 hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               CANCEL
             </button>
-            <button type="submit" className="flex-1 bg-yellow-400 py-2 font-semibold text-black hover:bg-yellow-500">
-              SAVE
+            <button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="flex-1 bg-yellow-400 py-2 font-semibold text-black hover:bg-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+            >
+              {isSubmitting ? (
+                <>
+                  <span className='animate-spin rounded-full h-4 w-4 border-2 border-black border-t-transparent'></span>
+                  Saving...
+                </>
+              ) : (
+                'SAVE'
+              )}
             </button>
           </div>
         </form>

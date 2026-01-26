@@ -1,73 +1,89 @@
 import PostSearch from '@/components/common/PostSearch'
 import { Plus } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PostsTable from './PostsTable'
 import PostForm from '../form/PostForm'
+import { useBlogStore } from '@/libs/useBlogStore'
+import { useAdminStore } from '@/libs/useAdminStore'
 
-const PostsAdmin = () => {
-  const [showAddPost, setShowAddPost] = useState(false);
-  const [allBlogs, setAllBlogs] = useState([
-    {
-      id: 1,
-      title: "Getting Started with React",
-      category: "Technology",
-      date: "2024-01-15",
-      views: 1234
-    },
-    {
-      id: 2,
-      title: "Web Design Best Practices",
-      category: "Design",
-      date: "2024-01-10",
-      views: 856
-    },
-    {
-      id: 3,
-      title: "Advanced JavaScript Tips",
-      category: "Technology",
-      date: "2024-01-08",
-      views: 2105
-    },
-    {
-      id: 4,
-      title: "UI/UX Trends 2024",
-      category: "Design",
-      date: "2024-01-05",
-      views: 1567
-    },
-    {
-      id: 5,
-      title: "SEO Optimization Guide",
-      category: "Marketing",
-      date: "2024-01-01",
-      views: 3421
+const PostsAdmin = ({ initialShowForm = false }) => {
+  const [showAddPost, setShowAddPost] = useState(initialShowForm);
+  const { setShowPostForm } = useAdminStore();
+  const [allBlogs, setAllBlogs] = useState([]);
+  const [filteredBlogs, setFilteredBlogs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { initializeBlogs, blogs, blogCategories, deletePost } = useBlogStore();
+
+  useEffect(() => {
+    if (initialShowForm) {
+      setShowAddPost(true);
+      setShowPostForm(false); // Reset the flag after opening
     }
-  ]);
-  const [filteredBlogs, setFilteredBlogs] = useState(allBlogs);
+  }, [initialShowForm, setShowPostForm]);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setIsLoading(true);
+        await initializeBlogs();
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchBlogs();
+  }, [initializeBlogs]);
+
+  useEffect(() => {
+    if (blogs && blogs.length > 0) {
+      setAllBlogs(blogs);
+      setFilteredBlogs(blogs);
+    }
+  }, [blogs]);
 
   const handleAddBlog = (newBlog) => {
-    const blog = {
-      id: Math.max(...allBlogs.map(b => b.id), 0) + 1,
-      ...newBlog,
-      views: 0
+    // Refetch blogs after adding a new one
+    const fetchBlogs = async () => {
+      try {
+        await initializeBlogs();
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      }
     };
-    const updatedBlogs = [...allBlogs, blog];
-    setAllBlogs(updatedBlogs);
-    setFilteredBlogs(updatedBlogs);
+    fetchBlogs();
     setShowAddPost(false);
   };
 
-  const handleDeleteBlog = (id) => {
-    const updatedBlogs = allBlogs.filter(blog => blog.id !== id);
+  const handleDeleteBlog = async (id) => {
+    try {
+      await deletePost(id);
+      const updatedBlogs = allBlogs.filter(blog => blog.postId !== id);
+      setAllBlogs(updatedBlogs);
+      setFilteredBlogs(updatedBlogs);
+      alert('Post deleted successfully!');
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      alert('Failed to delete post: ' + error.message);
+    }
+  };
+
+  const handleUpdateBlog = (updatedBlog) => {
+    const updatedBlogs = allBlogs.map(blog => blog.postId === updatedBlog.postId ? updatedBlog : blog);
     setAllBlogs(updatedBlogs);
     setFilteredBlogs(updatedBlogs);
   };
 
-  const handleUpdateBlog = (updatedBlog) => {
-    const updatedBlogs = allBlogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog);
-    setAllBlogs(updatedBlogs);
-    setFilteredBlogs(updatedBlogs);
-  };
+  if (isLoading) {
+    return (
+      <div className='w-full min-h-150 border border-yellow-600 flex items-center justify-center'>
+        <div className='flex flex-col items-center gap-3'>
+          <span className='h-8 w-8 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin'></span>
+          <p className='text-yellow-400'>Loading posts...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='w-full min-h-150 border border-yellow-600'>
@@ -88,7 +104,7 @@ const PostsAdmin = () => {
           <PostSearch allBlogs={allBlogs} setFilteredBlogs={setFilteredBlogs} />
         </div>
         <div>
-          <PostsTable blogs={filteredBlogs} onDelete={handleDeleteBlog} onUpdate={handleUpdateBlog} />
+          <PostsTable blogs={filteredBlogs} blogCategories={blogCategories} onDelete={handleDeleteBlog} onUpdate={handleUpdateBlog} />
         </div>
         {showAddPost && <PostForm onClose={() => setShowAddPost(false)} onAdd={handleAddBlog} />}
     </div>

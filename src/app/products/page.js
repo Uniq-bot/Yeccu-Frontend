@@ -2,6 +2,7 @@
 import CategoryFilter from '@/components/Product/CategoryFilter'
 import MobileFilter from '@/components/Product/MobileFilter'
 import ProductCard from '@/components/Product/ProductCard'
+import { motion } from 'framer-motion'
 import { useProductStore } from '@/libs/useProductStore'
 import React, { useState, useEffect } from 'react'
 
@@ -17,14 +18,19 @@ const Products = () => {
   return (
     <div className='flex relative flex-col w-full min-h-screen bg-[#111] text-white '>
       <MobileFilter />
-      <div className='flex flex-col items-center  py-20 h-30 justify-center'>
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className='flex flex-col items-center  py-20 h-30 justify-center'
+      >
         <h1 className='text-5xl md:text-6xl font-extrabold text-[#FFD700] py-2'>
           <span className='text-white flex flex-col items-center justify-center'>OUR</span> PRODUCTS
       </h1>
       <p className='text-[#99A1AF] text-s text-center md:text-xl flex items-center justify-center '>
         Premium basketball gears for Street Legends.
       </p>
-      </div>
+      </motion.div>
       <div className='px-6 md:px-12 lg:px-20 pb-20'>
           <CategoryFilter />
         <div className='mt-8'>

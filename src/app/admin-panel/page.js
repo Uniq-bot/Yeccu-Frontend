@@ -6,7 +6,7 @@ import { useAdminStore } from '@/libs/useAdminStore'
 const page = () => {
         const {renderComp}=useAdminStore();
   return (
-    <div className='text-black w-full bg-black min-h-screen text-white'>
+    <div className='w-full bg-black min-h-screen text-white'>
         <AdminNav />
        <div className='w-4/5 m-auto h-screen '>
          <div>

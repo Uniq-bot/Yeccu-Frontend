@@ -1,11 +1,19 @@
+'use client'
 import React from 'react'
 import './CSS/About.css'
+import { motion } from 'framer-motion'
 
 function About() {
   return (
     <div className='Aboutyecuu'>
       
-      <div className="about-left">
+      <motion.div 
+        initial={{ opacity: 0, x: -50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.6 }}
+        className="about-left"
+      >
         <div className='h1'>ABOUT <span className="yellow">YECCU</span></ div>
 
         <p>
@@ -21,14 +29,20 @@ function About() {
             expert coaching, and unwavering dedication to the game.
           </p>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="about-right">
+      <motion.div 
+        initial={{ opacity: 0, x: 50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.6 }}
+        className="about-right"
+      >
         <div className="image-wrapper">
           <img src="/About.jpg" alt="About YECCU" />
           <span className="est-tag">EST. 2025</span>
         </div>
-      </div>
+      </motion.div>
 
     </div>
   )
