@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
+import loadWa from "@/libs/loadWhatsapp";
 
 function Detail() {
   return (
@@ -16,7 +17,7 @@ function Detail() {
         <p className="text[6px] leading-0 py-2">
           Get instant answers on WhatsApp
         </p>
-        <h2 className="mt-5 px-5 py-3 text-center bg-black text-yellow-400 text-xs font-bold">CHAT ON WHATSAPP</h2>
+        <h2 onClick={()=>loadWa()} className="mt-5 px-5 py-3 text-center cursor-pointer bg-black text-yellow-400 text-xs font-bold">CHAT ON WHATSAPP</h2>
       </motion.div>
 
       <motion.div 

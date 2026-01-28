@@ -98,7 +98,7 @@ const ProductsTable = ({ products, onDeleteSuccess, productCategories }) => {
               <tr key={product.id} className="border-b border-zinc-800 hover:bg-zinc-900 transition-colors">
                 <td className="p-4 text-white text-sm">{product.productName || 'Untitled'}</td>
                 <td className="p-4 text-zinc-400 text-sm">{getCategoryTitle(product.categoryId)}</td>
-                <td className="p-4 text-zinc-400 text-sm">₹{product.price?.toFixed(2) || 'N/A'}</td>
+                <td className="p-4 text-zinc-400 text-sm">NRS. {product.price?.toFixed(2) || 'N/A'}</td>
                 <td className="p-4 text-center">
                   <div className="flex gap-2 justify-center">
                     <button
@@ -169,7 +169,7 @@ const ProductsTable = ({ products, onDeleteSuccess, productCategories }) => {
             <div className="flex justify-between items-center pt-2 border-t border-zinc-700">
               <div>
                 <p className="text-zinc-400 text-xs">Price</p>
-                <p className="text-yellow-400 font-bold">₹{product.price?.toFixed(2) || 'N/A'}</p>
+                <p className="text-yellow-400 font-bold">NRS. {product.price?.toFixed(2) || 'N/A'}</p>
               </div>
               <div className="text-right">
                 <p className="text-zinc-400 text-xs">Date</p>

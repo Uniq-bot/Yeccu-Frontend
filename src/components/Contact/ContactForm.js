@@ -1,8 +1,43 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
+import { contactInWhatsApp } from '@/libs/contactInWhatsapp'
 
 const ContactForm = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (!formData.name || !formData.email || !formData.phone) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    contactInWhatsApp(formData);
+    
+    // Reset form after submission
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      message: ''
+    });
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 30 }}
@@ -15,7 +50,7 @@ const ContactForm = () => {
         Send us a message
       </h1>
 
-      <form className="flex flex-col gap-5">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         
         {/* Name */}
         <div className="flex flex-col">
@@ -24,8 +59,11 @@ const ContactForm = () => {
           </label>
           <input
             type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
             placeholder='John Doe'
-            className="border border-amber-300 px-4 py-2 focus:outline-none text-white focus:ring-1"
+            className="border border-amber-300 px-4 py-2 focus:outline-none text-white focus:ring-1 bg-transparent"
             required
           />
         </div>
@@ -37,9 +75,12 @@ const ContactForm = () => {
           </label>
           <input
             type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             placeholder='johndoe@gmail.com'
             autoComplete="email"
-            className="border border-amber-300 text-white px-4 py-2 focus:outline-none "
+            className="border border-amber-300 text-white px-4 py-2 focus:outline-none bg-transparent"
             required
           />
         </div>
@@ -51,9 +92,12 @@ const ContactForm = () => {
           </label>
           <input
             type="tel"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
             placeholder='(+977) 120210200'
             autoComplete="tel"
-            className="border border-amber-300 text-white px-4 py-2 focus:outline-none "
+            className="border border-amber-300 text-white px-4 py-2 focus:outline-none bg-transparent"
             required
           />
         </div>
@@ -64,9 +108,12 @@ const ContactForm = () => {
             Message
           </label>
           <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
             rows="5"
             placeholder='Tell me about your basketball goals...'
-            className="border border-amber-300 px-4 text-white py-2 resize-none focus:outline-none "
+            className="border border-amber-300 px-4 text-white py-2 resize-none focus:outline-none bg-transparent"
           ></textarea>
         </div>
 
