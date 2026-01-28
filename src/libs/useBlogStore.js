@@ -98,11 +98,13 @@ export const useBlogStore =create((set, get)=>(
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
+                console.error("Post creation error response:", errorData);
                 throw new Error(errorData.message || `HTTP ${response.status}: Failed to create post`);
             }
 
             return await response.json();
         } catch (error) {
+            console.error("Post creation error:", error);
             throw new Error(
                 error.message ||
                     "Failed to create post"
@@ -136,81 +138,81 @@ export const useBlogStore =create((set, get)=>(
             );
         }
     },
-    // updatePost: async (postId, postData) => {
-    //     try {
-    //         const token = localStorage.getItem("token");
-    //         if (!token) throw new Error("Please login again");
+    updatePost: async (postId, postData) => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) throw new Error("Please login again");
 
-    //         const authHeader = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
+            const authHeader = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
 
-    //         const post = {
-    //             title: postData.title,
-    //             content: postData.content,
-    //             categoryId: postData.categoryId
-    //         };
+            const post = {
+                title: postData.title,
+                content: postData.content,
+                categoryId: postData.categoryId
+            };
 
-    //         console.log("Updating post with token:", authHeader.substring(0, 20) + "...");
-    //         
-    //         const response = await fetch(`https://surrounding-willi-yeccu-46ade4dd.koyeb.app/api/v1/admin/posts/${postId}`, {
-    //             method: "PUT",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //                 Authorization: authHeader
-    //             },
-    //             body: JSON.stringify(post)
-    //         });
+            console.log("Updating post with token:", authHeader.substring(0, 20) + "...");
+            
+            const response = await fetch(`https://surrounding-willi-yeccu-46ade4dd.koyeb.app/api/v1/admin/posts/${postId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: authHeader
+                },
+                body: JSON.stringify(post)
+            });
 
-    //         console.log("Update response status:", response.status);
+            console.log("Update response status:", response.status);
 
-    //         if (!response.ok) {
-    //             const errorData = await response.json().catch(() => ({}));
-    //             throw new Error(errorData.message || `HTTP ${response.status}: Failed to update post`);
-    //         }
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `HTTP ${response.status}: Failed to update post`);
+            }
 
-    //         return await response.json();
-    //     } catch (error) {
-    //         console.error("Update post error:", error);
-    //         throw new Error(
-    //             error.message ||
-    //                 "Failed to update post"
-    //         );
-    //     }
-    // },
-    // uploadPostImage: async (postId, imageFile) => {
-    //     try {
-    //         const token = localStorage.getItem("token");
-    //         if (!token) throw new Error("Please login again");
+            return await response.json();
+        } catch (error) {
+            console.error("Update post error:", error);
+            throw new Error(
+                error.message ||
+                    "Failed to update post"
+            );
+        }
+    },
+    uploadPostImage: async (postId, imageFile) => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) throw new Error("Please login again");
 
-    //         const authHeader = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
+            const authHeader = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
 
-    //         const formData = new FormData();
-    //         formData.append("image", imageFile);
+            const formData = new FormData();
+            formData.append("image", imageFile);
 
-    //         console.log("Uploading image with token:", authHeader.substring(0, 20) + "...");
+            console.log("Uploading image with token:", authHeader.substring(0, 20) + "...");
 
-    //         const response = await fetch(`https://surrounding-willi-yeccu-46ade4dd.koyeb.app/api/v1/admin/posts/image/upload/${postId}`, {
-    //             method: "POST",
-    //             headers: {
-    //                 Authorization: authHeader
-    //             },
-    //             body: formData
-    //         });
+            const response = await fetch(`https://surrounding-willi-yeccu-46ade4dd.koyeb.app/api/v1/admin/posts/image/upload/${postId}`, {
+                method: "POST",
+                headers: {
+                    Authorization: authHeader
+                },
+                body: formData
+            });
 
-    //         console.log("Upload response status:", response.status);
+            console.log("Upload response status:", response.status);
 
-    //         if (!response.ok) {
-    //             const errorData = await response.json().catch(() => ({}));
-    //             throw new Error(errorData.message || `HTTP ${response.status}: Failed to upload image`);
-    //         }
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `HTTP ${response.status}: Failed to upload image`);
+            }
 
-    //         return await response.json();
-    //     } catch (error) {
-    //         console.error("Upload image error:", error);
-    //         throw new Error(
-    //             error.message ||
-    //                 "Failed to upload image"
-    //         );
-    //     }
-    // }
+            return await response.json();
+        } catch (error) {
+            console.error("Upload image error:", error);
+            throw new Error(
+                error.message ||
+                    "Failed to upload image"
+            );
+        }
+    }
 })
 );

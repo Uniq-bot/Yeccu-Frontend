@@ -1,20 +1,19 @@
 'use client'
 import React, { useState } from 'react'
-import { useBlogStore } from '@/libs/useBlogStore'
+import { useProductStore } from '@/libs/useProductStore'
 import CategorySelector from '../../Categories/categorySelector/CategorySelector'
 import { useToast } from '@/libs/useToast'
 
-const EditBlog = ({ blog, onClose, onSave }) => {
+const EditProduct = ({ product, onClose, onSave }) => {
   const [formData, setFormData] = useState({
-    title: blog.title || '',
-    content: blog.content || '',
-    categoryId: blog.categoryId || '',
+    productName: product.productName || '',
+    price: product.price || '',
+    categoryId: product.categoryId || '',
     image: null
   })
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isContentExpanded, setIsContentExpanded] = useState(false)
-  const { updatePost, uploadPostImage } = useBlogStore()
+  const { updateProduct, uploadProductImage } = useProductStore()
   const { showToast } = useToast()
 
   const handleChange = (e) => {
@@ -36,13 +35,13 @@ const EditBlog = ({ blog, onClose, onSave }) => {
     e.preventDefault()
     setError('')
 
-    if (!formData.title.trim()) {
-      setError('Please enter a post title')
+    if (!formData.productName.trim()) {
+      setError('Please enter a product name')
       return
     }
 
-    if (!formData.content.trim()) {
-      setError('Please enter post content')
+    if (!formData.price || formData.price <= 0) {
+      setError('Please enter a valid price')
       return
     }
 
@@ -53,37 +52,37 @@ const EditBlog = ({ blog, onClose, onSave }) => {
 
     setIsSubmitting(true)
     try {
-      // Update post content first (JSON)
-      const postData = {
-        title: formData.title.trim(),
-        content: formData.content.trim(),
+      // Update product content first (JSON)
+      const productData = {
+        productName: formData.productName.trim(),
+        price: parseFloat(formData.price),
         categoryId: formData.categoryId
       }
       
-      console.log("Sending update for post:", blog.postId, postData);
-      await updatePost(blog.postId, postData)
-      console.log("Post updated successfully");
+      console.log("Sending update for product:", product.id, productData);
+      await updateProduct(product.id, productData)
+      console.log("Product updated successfully");
 
       // Upload image separately if selected - with small delay to avoid race condition
       if (formData.image) {
         console.log("Waiting before image upload...");
         await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay
         console.log("Uploading image...");
-        await uploadPostImage(blog.postId, formData.image)
+        await uploadProductImage(product.id, formData.image)
         console.log("Image uploaded successfully");
       }
 
       onSave({
-        ...blog,
-        title: formData.title.trim(),
-        content: formData.content.trim(),
+        ...product,
+        productName: formData.productName.trim(),
+        price: parseFloat(formData.price),
         categoryId: formData.categoryId
       })
       onClose()
-      showToast('Post updated successfully!', 'success')
+      showToast('Product updated successfully!', 'success')
     } catch (err) {
-      setError(err.message || 'Failed to update post')
-      console.error('Error updating post:', err)
+      setError(err.message || 'Failed to update product')
+      console.error('Error updating product:', err)
     } finally {
       setIsSubmitting(false)
     }
@@ -96,7 +95,7 @@ const EditBlog = ({ blog, onClose, onSave }) => {
         
         {/* Header */}
         <div className="flex items-center justify-between bg-yellow-400 px-4 py-3 sticky top-0">
-          <span className="text-black font-bold">EDIT POST</span>
+          <span className="text-black font-bold">EDIT PRODUCT</span>
           <button onClick={onClose} className="text-black hover:opacity-70 transition-opacity" disabled={isSubmitting}>
             ✕
           </button>
@@ -113,12 +112,12 @@ const EditBlog = ({ blog, onClose, onSave }) => {
 
           <div>
             <label className="block text-sm text-yellow-400 mb-1 font-bold">
-              POST TITLE
+              PRODUCT NAME
             </label>
             <input
               type="text"
-              name="title"
-              value={formData.title}
+              name="productName"
+              value={formData.productName}
               onChange={handleChange}
               disabled={isSubmitting}
               className="w-full bg-black border border-yellow-400 px-3 py-2 outline-none text-white focus:border-yellow-300 disabled:opacity-50"
@@ -127,33 +126,25 @@ const EditBlog = ({ blog, onClose, onSave }) => {
 
           <div>
             <label className="block text-sm text-yellow-400 mb-1 font-bold">
-              CONTENT
+              PRICE
             </label>
-            <textarea
-              name="content"
-              value={formData.content}
+            <input
+              type="number"
+              name="price"
+              value={formData.price}
               onChange={handleChange}
               disabled={isSubmitting}
-              className={`w-full bg-black border border-yellow-400 px-3 py-2 outline-none text-white focus:border-yellow-300 disabled:opacity-50 overflow-y-auto resize-vertical transition-all ${
-                isContentExpanded ? 'max-h-64' : 'max-h-24 min-h-24'
-              }`}
+              step="0.01"
+              min="0"
+              className="w-full bg-black border border-yellow-400 px-3 py-2 outline-none text-white focus:border-yellow-300 disabled:opacity-50"
             />
-            {formData.content.trim().length > 200 && (
-              <button
-                type="button"
-                onClick={() => setIsContentExpanded(!isContentExpanded)}
-                className="text-xs text-yellow-400 hover:text-yellow-300 mt-2 font-semibold"
-              >
-                {isContentExpanded ? 'Read Less' : 'Read More'}
-              </button>
-            )}
           </div>
 
           <div>
             <CategorySelector
               value={formData.categoryId}
               onChange={(value) => setFormData(prev => ({ ...prev, categoryId: value }))}
-              type="blog"
+              type="product"
               label="Category"
             />
           </div>
@@ -205,4 +196,4 @@ const EditBlog = ({ blog, onClose, onSave }) => {
   )
 }
 
-export default EditBlog
+export default EditProduct

@@ -4,6 +4,7 @@ import { X } from 'lucide-react'
 import { motion } from 'framer-motion'
 import CategorySelector from '../Categories/categorySelector/CategorySelector';
 import { useBlogStore } from '@/libs/useBlogStore';
+import { useToast } from '@/libs/useToast';
 
 const PostForm = ({ onClose, onAdd }) => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const PostForm = ({ onClose, onAdd }) => {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { createPost } = useBlogStore();
+  const { showToast } = useToast();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,8 +42,18 @@ const PostForm = ({ onClose, onAdd }) => {
       return;
     }
 
+    if (formData.title.trim().length > 255) {
+      setError('Title is too long (max 255 characters)');
+      return;
+    }
+
     if (!formData.content.trim()) {
       setError('Please enter post content');
+      return;
+    }
+
+    if (formData.content.trim().length > 5000) {
+      setError('Content is too long (max 5000 characters)');
       return;
     }
 
@@ -69,7 +81,7 @@ const PostForm = ({ onClose, onAdd }) => {
       setFormData({ title: '', content: '', category: '', image: null });
       onAdd && onAdd(postData);
       onClose();
-      alert('Post created successfully!');
+      showToast('Post created successfully!', 'success');
     } catch (err) {
       setError(err.message || 'Failed to create post');
       console.error('Error creating post:', err);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-// import EditBlog from './EditBlog/EditBlog';
+import EditBlog from './EditBlog/EditBlog';
 import { Edit, Trash } from 'lucide-react';
 const PostsTable = ({ blogs, blogCategories = [], onDelete, onUpdate }) => {
   const [deletingPostId, setDeletingPostId] = useState(null);
@@ -41,29 +41,28 @@ const PostsTable = ({ blogs, blogCategories = [], onDelete, onUpdate }) => {
     }
   };
   
-  // const handleEdit = (postId) => {
-  //   const blog = blogs.find(b => b.postId === postId);
-  //   setSelectedBlog(blog);
-  //   setIsEditOpen(true);
-  //   console.log("Edit blog with id:", postId);
-  // }
+  const handleEdit = (postId) => {
+    const blog = blogs.find(b => b.postId === postId);
+    setSelectedBlog(blog);
+    setIsEditOpen(true);
+    console.log("Edit blog with id:", postId);
+  }
 
-  // const handleCloseEdit = () => {
-  //   setIsEditOpen(false);
-  //   setSelectedBlog(null);
-  // }
+  const handleCloseEdit = () => {
+    setIsEditOpen(false);
+    setSelectedBlog(null);
+  }
 
-  // const handleSaveEdit = (updatedBlog) => {
-  //   onUpdate(updatedBlog);
-  //   handleCloseEdit();
-  // }
+  const handleSaveEdit = (updatedBlog) => {
+    onUpdate(updatedBlog);
+    handleCloseEdit();
+  }
 
   return (
     <>
-      {/* Edit feature disabled */}
-      {/* {isEditOpen && selectedBlog && (
+      {isEditOpen && selectedBlog && (
         <EditBlog blog={selectedBlog} onClose={handleCloseEdit} onSave={handleSaveEdit} />
-      )} */}
+      )}
       <div className="w-full overflow-x-auto px-5">
         {blogs.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-neutral-400">
@@ -93,8 +92,7 @@ const PostsTable = ({ blogs, blogCategories = [], onDelete, onUpdate }) => {
                   <td className="px-6 py-4 text-white text-center">{getCategoryTitle(blog.categoryId)}</td>
                   <td className="px-6 py-4 text-white text-center">{formatDate(blog.creationDate)}</td>
                   <td className="px-6 py-4 text-white text-center flex gap-2 justify-center">
-                    {/* Edit button disabled */}
-                    {/* <button onClick={() => handleEdit(blog.postId)} className="px-1 py-1 bg-yellow-600 hover:bg-yellow-700 text-white  text-[5px]"><Edit size={20} /></button> */}
+                    <button onClick={() => handleEdit(blog.postId)} className="px-1 py-1 bg-yellow-600 hover:bg-yellow-700 text-white  text-[5px]"><Edit size={20} /></button>
                     <button 
                       onClick={() => handleDeleteWithLoader(blog.postId)} 
                       disabled={deletingPostId === blog.postId}

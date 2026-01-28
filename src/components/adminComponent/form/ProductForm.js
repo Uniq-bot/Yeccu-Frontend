@@ -4,11 +4,11 @@ import { X } from 'lucide-react'
 import { motion } from 'framer-motion'
 import CategorySelector from '../Categories/categorySelector/CategorySelector';
 import { useProductStore } from '@/libs/useProductStore';
+import { useToast } from '@/libs/useToast';
 
 const ProductForm = ({ onClose, onAdd }) => {
   const [formData, setFormData] = useState({
     productName: '',
-    description: '',
     price: '',
     category: '',
     image: null
@@ -16,6 +16,7 @@ const ProductForm = ({ onClose, onAdd }) => {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { createProduct } = useProductStore();
+  const { showToast } = useToast();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,11 +42,6 @@ const ProductForm = ({ onClose, onAdd }) => {
       return;
     }
 
-    if (!formData.description.trim()) {
-      setError('Please enter a description');
-      return;
-    }
-
     if (!formData.price || parseFloat(formData.price) <= 0) {
       setError('Please enter a valid price');
       return;
@@ -65,7 +61,6 @@ const ProductForm = ({ onClose, onAdd }) => {
     try {
       const productData = {
         productName: formData.productName.trim(),
-        description: formData.description.trim(),
         price: parseFloat(formData.price),
         categoryId: formData.category,
         image: formData.image
@@ -73,10 +68,10 @@ const ProductForm = ({ onClose, onAdd }) => {
 
       await createProduct(productData);
       
-      setFormData({ productName: '', description: '', price: '', category: '', image: null });
+      setFormData({ productName: '', price: '', category: '', image: null });
       onAdd && onAdd(productData);
       onClose();
-      alert('Product created successfully!');
+      showToast('Product created successfully!', 'success');
     } catch (err) {
       setError(err.message || 'Failed to create product');
       console.error('Error creating product:', err);
@@ -132,21 +127,6 @@ const ProductForm = ({ onClose, onAdd }) => {
               disabled={isSubmitting}
               className="w-full bg-black border border-zinc-800 p-3 text-white focus:outline-none focus:border-yellow-400 transition-colors disabled:opacity-50"
               placeholder="Enter product title"
-            />
-          </div>
-
-          {/* Description */}
-          <div>
-            <label className="block text-xs font-bold text-yellow-400 uppercase mb-2 tracking-wider">
-              Description
-            </label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              disabled={isSubmitting}
-              className="w-full bg-black border border-zinc-800 p-3 text-white focus:outline-none focus:border-yellow-400 transition-colors disabled:opacity-50 min-h-24"
-              placeholder="Enter product description"
             />
           </div>
 

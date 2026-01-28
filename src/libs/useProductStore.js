@@ -30,6 +30,18 @@ export const useProductStore = create((set, get) => ({
       set({ isLoading: false });
     }
   },
+  initializeProductCategories: async () => {
+    set({ isLoading: true });
+    try {
+      const catRes = await instance.get('/api/v1/categories/product');
+      const categories = catRes.data || [];
+      console.log("Product Categories:", categories);
+      set({ categories, isLoading: false });
+    } catch (error) {
+      console.error("Error initializing product categories:", error);
+      set({ isLoading: false });
+    }
+  },
 
   
   
@@ -145,6 +157,85 @@ deleteProduct: async (productId) => {
     return true;
   } catch (error) {
     throw new Error(error.message || "Failed to delete product");
+  }
+},
+
+updateProduct: async (productId, productData) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("Please login again");
+
+    const authHeader = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
+
+    const product = {
+      productName: productData.productName,
+      description: productData.description,
+      price: productData.price,
+      categoryId: productData.categoryId
+    };
+
+    console.log("Updating product with token:", authHeader.substring(0, 20) + "...");
+    
+    const response = await fetch(`https://surrounding-willi-yeccu-46ade4dd.koyeb.app/api/v1/admin/products/${productId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authHeader
+      },
+      body: JSON.stringify(product)
+    });
+
+    console.log("Update response status:", response.status);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP ${response.status}: Failed to update product`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Update product error:", error);
+    throw new Error(
+      error.message ||
+        "Failed to update product"
+    );
+  }
+},
+
+uploadProductImage: async (productId, imageFile) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("Please login again");
+
+    const authHeader = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
+
+    const formData = new FormData();
+    formData.append("image", imageFile);
+
+    console.log("Uploading image with token:", authHeader.substring(0, 20) + "...");
+
+    const response = await fetch(`https://surrounding-willi-yeccu-46ade4dd.koyeb.app/api/v1/admin/products/image/upload/${productId}`, {
+      method: "POST",
+      headers: {
+        Authorization: authHeader
+      },
+      body: formData
+    });
+
+    console.log("Upload response status:", response.status);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP ${response.status}: Failed to upload image`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Upload image error:", error);
+    throw new Error(
+      error.message ||
+        "Failed to upload image"
+    );
   }
 },
 

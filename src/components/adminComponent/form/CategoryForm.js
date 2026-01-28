@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import useCreateCate from '@/libs/createCate';
+import { useToast } from '@/libs/useToast';
 
 const CategoryForm = ({close}) => {
   const [categoryName, setCategoryName] = useState('');
@@ -9,6 +10,7 @@ const CategoryForm = ({close}) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const { createCategory, isCreatingCate } = useCreateCate();
+  const { showToast } = useToast();
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -36,7 +38,7 @@ const handleSubmit = async (e) => {
     setCategoryName('');
     setCategoryType('');
     close(false);
-    alert('Category created successfully!');
+    showToast('Category created successfully!', 'success');
   } catch (error) {
     setError(error.message || 'Failed to create category');
   } finally {

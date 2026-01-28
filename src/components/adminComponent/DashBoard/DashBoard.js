@@ -155,7 +155,7 @@ const DashBoard = () => {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => handleQuickAction('products')}
-            className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 sm:py-4 px-4 sm:px-6 flex items-center justify-center gap-2 sm:gap-3 transition-colors text-sm sm:text-base"
+            className="bg-transparent hover:text-black cursor-pointer hover:bg-yellow-400 hover:bg-opacity-10 border-2 border-yellow-400 text-yellow-400 font-bold py-3 sm:py-4 px-4 sm:px-6 flex items-center justify-center gap-2 sm:gap-3 transition-colors text-sm sm:text-base"
           >
             <Plus size={20} strokeWidth={3} />
             ADD PRODUCT
@@ -165,7 +165,7 @@ const DashBoard = () => {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => handleQuickAction('posts')}
-            className="bg-transparent hover:bg-yellow-400 hover:bg-opacity-10 border-2 border-yellow-400 text-yellow-400 font-bold py-3 sm:py-4 px-4 sm:px-6 flex items-center justify-center gap-2 sm:gap-3 transition-colors text-sm sm:text-base"
+            className="bg-transparent hover:text-black cursor-pointer hover:bg-yellow-400 hover:bg-opacity-10 border-2 border-yellow-400 text-yellow-400 font-bold py-3 sm:py-4 px-4 sm:px-6 flex items-center justify-center gap-2 sm:gap-3 transition-colors text-sm sm:text-base"
           >
             <Plus size={20} strokeWidth={3} />
             ADD POST
@@ -175,7 +175,7 @@ const DashBoard = () => {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => handleQuickAction('categories')}
-            className="bg-transparent hover:bg-yellow-400 hover:bg-opacity-10 border-2 border-yellow-400 text-yellow-400 font-bold py-3 sm:py-4 px-4 sm:px-6 flex items-center justify-center gap-2 sm:gap-3 transition-colors text-sm sm:text-base sm:col-span-2 lg:col-span-1"
+            className="bg-transparent hover:text-black cursor-pointer hover:bg-yellow-400 hover:bg-opacity-10 border-2 border-yellow-400 text-yellow-400 font-bold py-3 sm:py-4 px-4 sm:px-6 flex items-center justify-center gap-2 sm:gap-3 transition-colors text-sm sm:text-base sm:col-span-2 lg:col-span-1"
           >
             <Plus size={20} strokeWidth={3} />
             ADD CATEGORY

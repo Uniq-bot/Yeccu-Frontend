@@ -5,6 +5,7 @@ import PostsTable from './PostsTable'
 import PostForm from '../form/PostForm'
 import { useBlogStore } from '@/libs/useBlogStore'
 import { useAdminStore } from '@/libs/useAdminStore'
+import { useToast } from '@/libs/useToast'
 
 const PostsAdmin = ({ initialShowForm = false }) => {
   const [showAddPost, setShowAddPost] = useState(initialShowForm);
@@ -12,7 +13,8 @@ const PostsAdmin = ({ initialShowForm = false }) => {
   const [allBlogs, setAllBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { initializeBlogs, blogs, blogCategories, deletePost } = useBlogStore();
+  const { initializeBlogs, initializeBlogCategories, blogs, blogCategories, deletePost } = useBlogStore();
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (initialShowForm) {
@@ -25,7 +27,10 @@ const PostsAdmin = ({ initialShowForm = false }) => {
     const fetchBlogs = async () => {
       try {
         setIsLoading(true);
-        await initializeBlogs();
+        await Promise.all([
+          initializeBlogs(),
+          initializeBlogCategories()
+        ]);
       } catch (error) {
         console.error("Error fetching blogs:", error);
       } finally {
@@ -33,7 +38,7 @@ const PostsAdmin = ({ initialShowForm = false }) => {
       }
     };
     fetchBlogs();
-  }, [initializeBlogs]);
+  }, [initializeBlogs, initializeBlogCategories]);
 
   useEffect(() => {
     if (blogs && blogs.length > 0) {
@@ -61,10 +66,10 @@ const PostsAdmin = ({ initialShowForm = false }) => {
       const updatedBlogs = allBlogs.filter(blog => blog.postId !== id);
       setAllBlogs(updatedBlogs);
       setFilteredBlogs(updatedBlogs);
-      alert('Post deleted successfully!');
+      showToast('Post deleted successfully!', 'success');
     } catch (error) {
       console.error("Error deleting post:", error);
-      alert('Failed to delete post: ' + error.message);
+      showToast('Failed to delete post: ' + error.message, 'error');
     }
   };
 

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import CategoryForm from '../form/CategoryForm';
 import useCreateCate from '@/libs/createCate';
 import { useAdminStore } from '@/libs/useAdminStore';
+import { useToast } from '@/libs/useToast';
 
 const CategoriesAdmin = ({ initialShowForm = false }) => {
   
@@ -16,6 +17,7 @@ const CategoriesAdmin = ({ initialShowForm = false }) => {
     isLoadingCategories,
     deletingCategoryId,
   } = useCreateCate();
+  const { showToast } = useToast();
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -31,9 +33,9 @@ const CategoriesAdmin = ({ initialShowForm = false }) => {
       setCategories(data);
     } catch (error) {
       console.error("Error fetching categories:", error.message);
-      alert("Failed to load categories");
+      showToast("Failed to load categories", "error");
     }
-  }, [getAllCategory]);
+  }, [getAllCategory, showToast]);
 
   useEffect(() => {
     fetchCategories();
@@ -43,10 +45,10 @@ const CategoriesAdmin = ({ initialShowForm = false }) => {
     try {
       await deleteCategory(categoryId);
       await fetchCategories();
-      alert("Category deleted successfully!");
+      showToast("Category deleted successfully!", "success");
     } catch (error) {
       console.error("Error deleting category:", error.message);
-      alert("Failed to delete category");
+      showToast("Failed to delete category", "error");
     }
   };
   

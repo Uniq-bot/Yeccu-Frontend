@@ -16,13 +16,13 @@ const Navbar = () => {
   const pathname = usePathname();
   const { token, user, isAdmin } = useAuthStore();
   const [basketballName, setBasketballName] = useState("");
-  const router=usePathname();
- const hideDashboard = pathname === '/admin-panel' || pathname === '/login' || pathname === '/register'
+  const router = usePathname();
+  const hideDashboard = pathname === '/admin-panel' || pathname === '/login' || pathname === '/register'
   useEffect(() => {
     setMounted(true);
   }, []);
 
- 
+
   const normalize = (p) => (p === "/" ? "/" : p.replace(/\/$/, ""));
 
   const isActive = (href) => {
@@ -36,16 +36,16 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
   };
-  const toggleLGbutton=()=>{
+  const toggleLGbutton = () => {
     setShowBtn(!showBtn);
   }
-  const handleLogout=()=>{
+  const handleLogout = () => {
     localStorage.removeItem("token");
     window.location.href = '/';
   }
 
   return (
-    <motion.header 
+    <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
@@ -63,7 +63,7 @@ const Navbar = () => {
           </div>
 
           <ul className="hidden md:flex ml-30 select-none justify-center items-center gap-6 text-sm font-semibold uppercase tracking-wide">
-            {[{ href: '/', label: 'Home' }, { href: '/products', label: 'Products' }, { href: '/blogs', label: 'Blog' }, { href: '/contact', label: 'Contact' }].map((item) => (
+            {[{ href: '/', label: 'Home' }, { href: '/products', label: 'Products' }, { href: '/blogs', label: 'Posts' }, { href: '/contact', label: 'Contact' }].map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
@@ -104,7 +104,7 @@ const Navbar = () => {
                     </svg>
                     <span className="text-white select-none uppercase font-semibold text-sm">{user}</span>
                   </button>
-                  
+
                   {/* Logout Dropdown Menu */}
                   <div className={`absolute right-0 mt-2 w-48 bg-black border border-yellow-400/30 rounded-md shadow-lg z-50 overflow-hidden transition-all duration-200 ease-out transform origin-top-right ${showBtn ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'}`}>
                     <button
@@ -133,7 +133,7 @@ const Navbar = () => {
                     </button>
                   </div>
                 </div>
-           
+
                 <div>
                   {isAdmin && !hideDashboard && <DashButton />}
                 </div>
@@ -196,30 +196,35 @@ const Navbar = () => {
                   </Link>
                 </li>
               ))}
+
               {token ? (
-                <li>
-                  <div onClick={()=>handleLogout()} className="flex items-center gap-2 rounded-md px-2 py-2 bg-yellow-400/10 border border-yellow-400/30">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-yellow-400/50 bg-black/60">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="text-yellow-400"
-                      >
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                      </svg>
-                    </span>
-                    <span className="text-white  font-semibold text-sm">{user}</span>
-                  </div>
-                </li>
-                
+                <>
+
+                  <li>
+                    <div onClick={() => handleLogout()} className="flex items-center gap-2 rounded-md px-2 py-2 bg-yellow-400/10 border border-yellow-400/30">
+                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-yellow-400/50 bg-black/60">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="text-yellow-400"
+                        >
+                          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                          <circle cx="12" cy="7" r="4" />
+                        </svg>
+                      </span>
+                      <span className="text-white  font-semibold text-sm">{user}</span>
+                    </div>
+                  </li>
+
+                </>
+
               ) : (
                 <li>
                   <Link
@@ -247,9 +252,7 @@ const Navbar = () => {
                   </Link>
                 </li>
               )}
-              <li>
-                {isAdmin && !hideDashboard && <DashButton />}
-              </li>
+
             </ul>
           </div>
         </div>

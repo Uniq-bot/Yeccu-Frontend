@@ -21,3 +21,30 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.animate-fade-in-out {
+  animation: fadeInOut 3.3s ease-in-out;
+}
+
+.animate-fade-out {
+  animation: fadeInOut 0.3s ease-in-out;
+}

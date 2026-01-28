@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import ProductForm from '../form/ProductForm'
 import ProductsTable from './ProductsTable'
 import { useProductStore } from '@/libs/useProductStore'
-import useCreateCate from '@/libs/createCate'
 import { useAdminStore } from '@/libs/useAdminStore'
 
 const ProductsAdmin = ({ initialShowForm = false }) => {
@@ -12,10 +11,8 @@ const ProductsAdmin = ({ initialShowForm = false }) => {
   const [allProducts, setAllProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [productCategories, setProductCategories] = useState([]);
 
-  const { products, initializeProducts } = useProductStore();
-  const { allCategories, getAllCategory } = useCreateCate();
+  const { products, categories, initializeProducts } = useProductStore();
 
   useEffect(() => {
     if (initialShowForm) {
@@ -29,7 +26,6 @@ const ProductsAdmin = ({ initialShowForm = false }) => {
       try {
         setIsLoading(true);
         await initializeProducts();
-        await getAllCategory();
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -46,12 +42,6 @@ const ProductsAdmin = ({ initialShowForm = false }) => {
       setFilteredProducts(products);
     }
   }, [products]);
-
-  useEffect(() => {
-    if (allCategories && Array.isArray(allCategories)) {
-      setProductCategories(allCategories);
-    }
-  }, [allCategories]);
 
   const handleAddProduct = () => {
     // Refetch products after adding
@@ -71,10 +61,10 @@ const ProductsAdmin = ({ initialShowForm = false }) => {
       const updatedProducts = allProducts.filter(product => product.id !== productId);
       setAllProducts(updatedProducts);
       setFilteredProducts(updatedProducts);
-      alert('Product deleted successfully!');
+      showToast('Product deleted successfully!', 'success');
     } catch (error) {
       console.error('Error deleting product:', error);
-      alert('Failed to delete product: ' + error.message);
+      showToast('Failed to delete product: ' + error.message, 'error');
     }
   };
 
@@ -105,7 +95,7 @@ const ProductsAdmin = ({ initialShowForm = false }) => {
           </button>
         </div>
         <div>
-          <ProductsTable products={filteredProducts} productCategories={productCategories} onDeleteSuccess={handleDeleteProduct} />
+          <ProductsTable products={filteredProducts} productCategories={categories} onDeleteSuccess={handleDeleteProduct} />
         </div>
         {showAddProduct && <ProductForm onClose={() => setShowAddProduct(false)} onAdd={handleAddProduct} />}
     </div>

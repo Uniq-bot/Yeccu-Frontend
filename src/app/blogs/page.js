@@ -40,14 +40,14 @@ const Blogs = () => {
 
   return (
     <div>
-      <main className={`max-w-7xl ${currBlogState? "hidden" : ""} min-h-200 mx-auto px-4 sm:px-6 lg:px-8 py-12`}>
+      <main className={`max-w-7xl ${currBlogState? "hidden" : ""} overflow-y-auto min-h-300 mx-auto px-4 sm:px-6 lg:px-8 py-12`}>
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="text-5xl font-bold mb-8 "
         >
-          YECCU<span className="text-amber-400"> BLOGS</span>
+          YECCU<span className="text-amber-400"> POSTS</span>
         </motion.h1>
         <div className="mb-8">
           <CategoryFilterBlogs
@@ -106,7 +106,7 @@ const Blogs = () => {
         </div>
       )}
       {currBlogState && (
-          <div className="mt-10 fixed inset-0 bg-black bg-opacity-50 z-40">
+          <div className="mt-10 overflow-y-auto fixed inset-0 bg-black bg-opacity-50 z-40">
             <div className="w-1/2 px-6 py-12 flex flex-col m-auto">
               <button className="w-full text-left text-sm text-gray-100 hover:underline-offset-1 hover:text-amber-300 cursor-pointer mb-6 " onClick={() => setCurrBlog(null)}>← Back to Blogs</button>
               <img src={currBlogState.imageName || `/blogimage${currBlogState.postId ?? currBlogState.id}.jpg`} alt={currBlogState.title} className="w-full h-100 object-cover  mb-4 border-2 border-amber-300 " />
